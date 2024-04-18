@@ -14,6 +14,10 @@ import time
 ######################################################################################################
 #Ventana Principal
 ######################################################################################################
+
+def printHola():
+    print("Hola")
+
 pygame.init()
 Ventana_Principal = tk.Tk()
 Ventana_Principal.attributes('-fullscreen', True)
