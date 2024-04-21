@@ -1,142 +1,160 @@
+from tkinter import *
 import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter.font import Font
-from tkinter import PhotoImage
-import pygame
-from pygame.locals import *
-import random
-import time
-######################################################################################################
-#
-#
-#
-######################################################################################################
-#Ventana Principal
-######################################################################################################
-pygame.init()
+
+# Función para cerrar las ventanas
+def Cerrar_Ventana(event):
+    if 'Ventana_Play' in globals() and Ventana_Play.winfo_exists():
+        Ventana_Play.destroy()
+    elif 'Ventana_About' in globals() and Ventana_About.winfo_exists():
+        Ventana_About.destroy()
+    else:
+        Ventana_Principal.destroy()
+
+# Función para cambiar la imagen del carrusel de jugadores
+def Cambiar_Imagen_Carrusel_Jugadores():
+    global imagen_index_jugadores
+    if 'imagen_index_jugadores' not in globals():
+        imagen_index_jugadores = 0  # Inicializa imagen_index_jugadores si no está definida
+    if imagen_index_jugadores == len(equipos[team_index]) - 1:
+        imagen_index_jugadores = 0
+    else:
+        imagen_index_jugadores += 1
+
+    imagen_actual = equipos[team_index][imagen_index_jugadores]
+    canvas_imagen_jugadores.itemconfig(imagen_canvas_jugadores, image=imagen_actual)
+
+# Función para cambiar de equipo para jugador 1
+def Cambiar_Equipo():
+    global team_index
+    if team_index == len(equipos) - 1:
+        team_index = 0
+    else:
+        team_index += 1
+
+    nombre_equipo.set(nombres_equipos[team_index])
+    imagen_actual_jugadores = equipos[team_index][imagen_index_jugadores]
+    canvas_imagen_jugadores.itemconfig(imagen_canvas_jugadores, image=imagen_actual_jugadores)
+    canvas_imagen_jugador2.itemconfig(imagen_canvas_jugador2, image=imagen_actual_jugadores)
+
+# Función para cambiar de equipo para jugador 2
+def Cambiar_Equipo_Jugador2():
+    global team_index_jugador2
+    if team_index_jugador2 == len(equipos) - 1:
+        team_index_jugador2 = 0
+    else:
+        team_index_jugador2 += 1
+
+    nombre_equipo_jugador2.set(nombres_equipos[team_index_jugador2])
+    imagen_actual_jugador2 = equipos[team_index_jugador2][imagen_index_jugadores]
+    canvas_imagen_jugador2.itemconfig(imagen_canvas_jugador2, image=imagen_actual_jugador2)
+
+# Función para abrir la ventana de PLAY
+def Abrir_Ventana_Play():
+    global Ventana_Play, imagen_canvas_jugadores, canvas_imagen_jugadores, canvas_imagen_jugador2, imagen_canvas_jugador2, equipos, imagen_index_jugadores, nombres_equipos
+    Ventana_Play = tk.Toplevel()
+    Ventana_Play.attributes('-fullscreen', True)
+    Ventana_Play.title("PLAY")
+    Ventana_Play.config(bg="black")
+    Ventana_Play.bind('<Escape>', Cerrar_Ventana)
+
+    # Definir equipos y nombres de equipos
+    equipos = [
+        [
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo1/jugador1.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo1/jugador2.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo1/jugador3.png").resize((300, 300), Image.LANCZOS)),
+        ],
+        [
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo2/jugador1.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo2/jugador2.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo2/jugador3.png").resize((300, 300), Image.LANCZOS)),
+        ],
+        [
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo3/jugador1.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo3/jugador2.png").resize((300, 300), Image.LANCZOS)),
+            ImageTk.PhotoImage(Image.open("Jugadores/Equipo3/jugador3.png").resize((300, 300), Image.LANCZOS)),
+        ],
+    ]
+
+    nombres_equipos = ["Manchester City", "París Saint-Germain", "Real Madrid"]
+
+    global imagen_index_jugadores, team_index, team_index_jugador2
+    imagen_index_jugadores = 0
+    team_index = 0
+    team_index_jugador2 = 0
+
+    # Configurar label para el nombre del equipo jugador 1
+    global nombre_equipo
+    nombre_equipo = tk.StringVar()
+    nombre_equipo.set(nombres_equipos[team_index])
+    label_nombre_equipo = tk.Label(Ventana_Play, textvariable=nombre_equipo, font=Font_Label)
+    label_nombre_equipo.pack()
+
+    # Configurar carrusel de jugador 1
+    imagen_actual_jugador1 = equipos[team_index][imagen_index_jugadores]
+    global canvas_imagen_jugadores, imagen_canvas_jugadores
+    canvas_imagen_jugadores = tk.Canvas(Ventana_Play, width=300, height=300, bg="white")
+    imagen_canvas_jugadores = canvas_imagen_jugadores.create_image(0, 0, anchor=tk.NW, image=imagen_actual_jugador1)
+    canvas_imagen_jugadores.pack()
+
+    boton_carrusel_jugador1 = tk.Button(Ventana_Play, text="Siguiente Jugador Jugador 1", command=Cambiar_Imagen_Carrusel_Jugadores)
+    boton_carrusel_jugador1.pack()
+
+    # Configurar botón para cambiar de equipo jugador 1
+    boton_cambiar_equipo = tk.Button(Ventana_Play, text="Cambiar Equipo Jugador 1", command=Cambiar_Equipo)
+    boton_cambiar_equipo.pack()
+
+    # Configuración de label y botón para jugador 2
+    imagen_actual_jugador2 = equipos[team_index_jugador2][imagen_index_jugadores]
+    global canvas_imagen_jugador2, imagen_canvas_jugador2
+    canvas_imagen_jugador2 = tk.Canvas(Ventana_Play, width=300, height=300, bg="white")
+    imagen_canvas_jugador2 = canvas_imagen_jugador2.create_image(0, 0, anchor=tk.NW, image=imagen_actual_jugador2)
+    canvas_imagen_jugador2.pack()
+
+    boton_carrusel_jugador2 = tk.Button(Ventana_Play, text="Siguiente Jugador Jugador 2", command=Cambiar_Imagen_Carrusel_Jugadores)
+    boton_carrusel_jugador2.pack()
+
+        # Configurar botón para cambiar de equipo jugador 2
+    boton_cambiar_equipo_jugador2 = tk.Button(Ventana_Play, text="Cambiar Equipo Jugador 2", command=Cambiar_Equipo_Jugador2)
+    boton_cambiar_equipo_jugador2.pack()
+
+    # Configurar label para el nombre del equipo jugador 2
+    global nombre_equipo_jugador2
+    nombre_equipo_jugador2 = tk.StringVar()
+    nombre_equipo_jugador2.set(nombres_equipos[team_index_jugador2])
+    label_nombre_equipo_jugador2 = tk.Label(Ventana_Play, textvariable=nombre_equipo_jugador2, font=Font_Label)
+    label_nombre_equipo_jugador2.pack()
+
+# Función para abrir la ventana ABOUT
+def Abrir_Ventana_About():
+    global Ventana_About, Font_Label
+    Ventana_About = tk.Toplevel()
+    Ventana_About.attributes('-fullscreen', True)
+    Ventana_About.title("ABOUT")
+    Ventana_About.config(bg="black")
+    Ventana_About.bind('<Escape>', Cerrar_Ventana)
+    # Agregar contenido de la ventana ABOUT aquí
+
+# Ventana Principal
 Ventana_Principal = tk.Tk()
 Ventana_Principal.attributes('-fullscreen', True)
-Ventana_Principal.title("fundamentos")
-######################################################################################################
-#Canción de Fondo
-pygame.mixer.music.load('sounds/EA SPORTS FIFA 98 Road to World Cup - Intro.mp3')
-pygame.mixer.music.play(-1)
-######################################################################################################
-#Funciones para mostrar los frames
-def Mostrar_Frame_Play():
-    Frame_Play.place(x=0, y=0, relwidth=1, relheight=1)
+Ventana_Principal.title("MAIN")
+Ventana_Principal.bind('<Escape>', Cerrar_Ventana)
 
-def Mostrar_Frame_About():
-    Frame_About.place(x=0, y=0, relwidth=1, relheight=1)
-######################################################################################################
-#Frames y sus canvas
-Frame_Principal = tk.Frame(Ventana_Principal, bg="black")
-Frame_Principal.pack(fill=tk.BOTH, expand=True)
+# Fuentes
+Font_Button = Font(family="Courier New", size=24, weight="bold")
+Font_Label = Font(family="Courier New", size=24, weight="bold")
 
-Canvas_Principal = tk.Canvas(Frame_Principal, bg="black", highlightthickness=0)
-Canvas_Principal.pack(fill=tk.BOTH, expand=True)
+# Botones
+Boton_Play = tk.Button(Ventana_Principal, text="PLAY", font=Font_Button, command=Abrir_Ventana_Play)
+Boton_Play.pack(pady=(500, 0))
 
-Frame_Play = tk.Frame(Ventana_Principal, bg="blue", borderwidth=0)
-Frame_Play.place(x=0, y=0, relwidth=0, relheight=0)
+Boton_About = tk.Button(Ventana_Principal, text="ABOUT", font=Font_Button, command=Abrir_Ventana_About)
+Boton_About.pack(pady=10)
 
-Canvas_PLay = tk.Canvas(Frame_Play, bg="black", highlightthickness=0)
-Canvas_PLay.pack(fill=tk.BOTH, expand=True)
-
-segundo_canvas = tk.Canvas(Frame_Play, bg="blue", highlightthickness=0)
-segundo_canvas.pack(fill=tk.BOTH, expand=True)
-
-Frame_About = tk.Frame(Ventana_Principal, bg="green", borderwidth=0)
-Frame_About.place(x=0, y=0, relwidth=0, relheight=0)
-
-Canvas_About = tk.Canvas(Frame_About, bg="green", highlightthickness=0)
-Canvas_About.pack(fill=tk.BOTH, expand=True)
-######################################################################################################
-#Fuente de los botones
-Font_Button = Font(family="Arial", size="24", weight="bold")
-######################################################################################################
-#Botones
-boton_play = tk.Button(Canvas_Principal, text="Play", font=Font_Button, padx=20, pady=0, command=Mostrar_Frame_Play)
-boton_play.pack(pady=(400,20))
-
-boton_about = tk.Button(Canvas_Principal, text="About", font=Font_Button, padx=7, pady=0, command=Mostrar_Frame_About)
-boton_about.pack()
-######################################################################################################
-#Cerrar con escape
-def cerrar_con_escape(event):
-    if Frame_Play.winfo_ismapped() and event.keysym == "Escape":
-        Frame_Play.place_forget()
-    elif Frame_About.winfo_ismapped() and event.keysym == "Escape":
-        Frame_About.place_forget()
-    elif not Frame_Play.winfo_ismapped() and not Frame_About.winfo_ismapped() and event.keysym == "Escape":
-        Ventana_Principal.destroy()
-Ventana_Principal.bind("<KeyPress>", cerrar_con_escape)
-######################################################################################################
-#About
-######################################################################################################
-#Fuentes de About
-Font_Main = Font(family="Arial", size="15", weight="bold")
-Font_Sub = Font(family="Arial", size="15", weight="bold")
-Font_Button_1 = Font(family="Arial", size="19", weight="bold")
-######################################################################################################
-#Funciones para mostrar los frames
-def Mostrar_Frame_Creador1():
-    Frame_Creador2.place_forget()
-    Frame_Creador1.place(x=0, y=0, relwidth=0.5, relheight=1)
-
-def Mostrar_Frame_Creador2():
-    Frame_Creador1.place_forget()
-    Frame_Creador2.place(x=0, y=0, relwidth=0.5, relheight=1)
-    Frame_Creador.place_forget()
-
-######################################################################################################
-#Creadores
-Canvas_Creadores = tk.Frame(Canvas_About, bg="white", width=1366, height=256, highlightthickness=0)
-Canvas_Creadores.pack(side="top")
-
-Frame_Creador2 = tk.Frame(Canvas_Creadores, bg="white", width=683, height=256, highlightthickness=0)
-Frame_Creador2.place(x=0, y=0)
-
-Frame_Creador1 = tk.Frame(Canvas_Creadores, bg="black", width=683, height=256, highlightthickness=0)
-Frame_Creador1.place(x=0, y=0)
-
-Label_Creador1 = tk.Label(Frame_Creador1, text="Steven Aguilar Alvarez\n\n3 0557 0029\n\n2028 2024 65", font=Font_Sub, fg="white", bg="black")
-Label_Creador1.pack(pady=60)
-
-Label_Creador2 = tk.Label(Frame_Creador2, text="Jannes Ronhaar Flores\n\n3 0557 0029\n\n2028 2024 65", font=Font_Sub, fg="black", bg="white")
-Label_Creador2.pack(pady=60)
-
-Frame_Creador = tk.Frame(Canvas_Creadores, bg="white", width=683, height=256, highlightthickness=0)
-Frame_Creador.place(x=0, y=0)
-
-#Botones
-boton_creador1 = tk.Button(Canvas_Creadores, font=Font_Button_1,text="CREADOR1", command=Mostrar_Frame_Creador2)
-boton_creador1.place(relx=0.75, y=50, anchor="n")
-
-boton_creador2 = tk.Button(Canvas_Creadores, font=Font_Button_1, text="CREADOR2", command=Mostrar_Frame_Creador1)
-boton_creador2.place(relx=0.75, y=150, anchor="n")
-###################
-#Información
-Canvas_Información = tk.Frame(Canvas_About, bg="black", width=1366, height=256, highlightthickness=0)
-Canvas_Información.pack(side="top")
-
-Label_Info = tk.Label(Canvas_Información, text="INFORMATION", font=Font_Main, fg="white", bg="black")
-Label_Info.place(relx=0.5, rely=0.1, anchor='center')
-
-Label_Info1 = tk.Label(Canvas_Información, text="FUNDAMENTOS DE SISTEMAS COMPUTACIONALES\nLICENCIATURA EN INGENIERÍA EN COMPUTADORES\n2024\nLUIS ALBERTO CHAVARRÍA\nCOSTA RICA\nVERSION 0.1", font=Font_Main, fg="white", bg="black")
-Label_Info1.place(relx=0.5, rely=0.1, anchor='center', y=120)
-###################
-#Controles
-Canvas_Controles = tk.Frame(Canvas_About, bg="white", width=1366, height=256, highlightthickness=0)
-Canvas_Controles.pack(side="top")
-
-
-Label_Controles = tk.Label(Canvas_Controles, text="CONTROLS", font=Font_Main, fg="black", bg="white")
-Label_Controles.place(relx=0.5, rely=0.1, anchor='center')
-######################################################################################################
-#Ventana Play
-######################################################################################################
-
-######################################################################################################
+Label_Version = Label(Ventana_Principal, text="version: 0.1", font=("Courier New", 10, "bold"), fg="white", bg="black")
+Label_Version.place(x=0, y=0)
 
 Ventana_Principal.mainloop()
-pygame.quit()
