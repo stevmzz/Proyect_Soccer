@@ -200,10 +200,10 @@ def actualizarImagen(event):
     global imagen1
     width = event.width
     height = event.height
-    imagen1 = cargarImagen("wallpaper8.png", width, height)
+    imagen1 = cargarImagen("wallpaper6.png", width, height)
     LabelFondo.config(image=imagen1)
 
-imagen1 = cargarImagen("wallpaper8.png", Ventana_Principal.winfo_width(), Ventana_Principal.winfo_height())
+imagen1 = cargarImagen("wallpaper6.png", Ventana_Principal.winfo_width(), Ventana_Principal.winfo_height())
 LabelFondo = Label(Ventana_Principal, image=imagen1)
 LabelFondo.place(x=0, y=0, relwidth=1, relheight=1)
 Ventana_Principal.bind("<Configure>", actualizarImagen)
@@ -214,10 +214,10 @@ Font_Label = Font(family="Courier New", size=24, weight="bold")
 
 # Botones
 Boton_Play = tk.Button(Ventana_Principal, text="PLAY", font=Font_Button, command=Abrir_Ventana_Play, fg="white", bg="black", padx=50)
-Boton_Play.place(x=200, y=400)
+Boton_Play.place(x=200, y=300)
 
 Boton_About = tk.Button(Ventana_Principal, text="ABOUT", font=Font_Button, command=Abrir_Ventana_About, fg="white", bg="black", padx=38)
-Boton_About.place(x=200, y=300)
+Boton_About.place(x=200, y=400)
 
 Label_Version = Label(Ventana_Principal, text="version: 0.1", font=("Courier New", 12, "bold"), fg="white", bg="black")
 Label_Version.place(x=10, y=10)
