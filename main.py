@@ -3,8 +3,13 @@ import tkinter as tk
 from PIL import Image, ImageTk
 from tkinter.font import Font
 import os
-
-# Función para cerrar las ventanas
+import pygame
+########################################################################################
+#Música
+pygame.init()
+pygame.mixer.music.load("sounds/EA SPORTS FIFA 98 Road to World Cup - Intro.mp3")
+pygame.mixer.music.play(-1)
+########################################################################################
 def Cerrar_Ventana(event):
     if 'Ventana_Play' in globals() and Ventana_Play.winfo_exists():
         Ventana_Play.destroy()
@@ -12,12 +17,11 @@ def Cerrar_Ventana(event):
         Ventana_About.destroy()
     else:
         Ventana_Principal.destroy()
-
-# Función para cambiar la imagen del carrusel de jugadores
+########################################################################################
 def Cambiar_Imagen_Carrusel_Jugadores():
     global imagen_index_jugadores, team_index
     if 'imagen_index_jugadores' not in globals():
-        imagen_index_jugadores = 0  # Inicializa imagen_index_jugadores si no está definida
+        imagen_index_jugadores = 0 
     if imagen_index_jugadores == len(equipos[team_index]) - 1:
         imagen_index_jugadores = 0
     else:
@@ -25,8 +29,7 @@ def Cambiar_Imagen_Carrusel_Jugadores():
 
     imagen_actual = equipos[team_index][imagen_index_jugadores]
     canvas_imagen_jugadores.itemconfig(imagen_canvas_jugadores, image=imagen_actual)
-
-# Función para cambiar de equipo para jugador 1
+########################################################################################
 def Cambiar_Equipo_Jugador1():
     global team_index_jugador1
     if team_index_jugador1 == len(equipos) - 1:
@@ -38,7 +41,6 @@ def Cambiar_Equipo_Jugador1():
     imagen_actual_jugador1 = equipos[team_index_jugador1][imagen_index_jugadores]
     canvas_imagen_jugador1.itemconfig(imagen_canvas_jugador1, image=imagen_actual_jugador1)
 
-# Función para cambiar de jugador para jugador 1
 def Cambiar_Jugador_Jugador1():
     global jugador_index_jugador1
     if jugador_index_jugador1 == len(equipos[team_index_jugador1]) - 1:
@@ -49,7 +51,6 @@ def Cambiar_Jugador_Jugador1():
     imagen_actual_jugador1 = equipos[team_index_jugador1][jugador_index_jugador1]
     canvas_imagen_jugador1.itemconfig(imagen_canvas_jugador1, image=imagen_actual_jugador1)
 
-# Función para cambiar de equipo para jugador 2
 def Cambiar_Equipo_Jugador2():
     global team_index_jugador2
     if team_index_jugador2 == len(equipos) - 1:
@@ -61,7 +62,6 @@ def Cambiar_Equipo_Jugador2():
     imagen_actual_jugador2 = equipos[team_index_jugador2][imagen_index_jugadores]
     canvas_imagen_jugador2.itemconfig(imagen_canvas_jugador2, image=imagen_actual_jugador2)
 
-# Función para cambiar de jugador para jugador 2
 def Cambiar_Jugador_Jugador2():
     global jugador_index_jugador2
     if jugador_index_jugador2 == len(equipos[team_index_jugador2]) - 1:
@@ -71,8 +71,7 @@ def Cambiar_Jugador_Jugador2():
 
     imagen_actual_jugador2 = equipos[team_index_jugador2][jugador_index_jugador2]
     canvas_imagen_jugador2.itemconfig(imagen_canvas_jugador2, image=imagen_actual_jugador2)
-
-# Función para abrir la ventana de PLAY
+########################################################################################
 def Abrir_Ventana_Play():
     global Ventana_Play, imagen_canvas_jugadores, canvas_imagen_jugadores, canvas_imagen_jugador1, imagen_canvas_jugador1, canvas_imagen_jugador2, imagen_canvas_jugador2, equipos, imagen_index_jugadores, nombres_equipos, team_index_jugador1, team_index_jugador2, jugador_index_jugador1, jugador_index_jugador2
     Ventana_Play = tk.Toplevel()
@@ -123,12 +122,15 @@ def Abrir_Ventana_Play():
     imagen_canvas_jugador1 = canvas_imagen_jugador1.create_image(0, 0, anchor=tk.NW, image=imagen_actual_jugador1)
     canvas_imagen_jugador1.place(x=330, y=200)
 
-    boton_carrusel_jugador1 = tk.Button(Ventana_Play, text="Siguiente Jugador Jugador 1", command=Cambiar_Jugador_Jugador1)
-    boton_carrusel_jugador1.place(x=330, y=550)
+    Font_Button_Seleccion = Font(family="helvatica", size=18, weight="bold")
+    Font_Button_Ready = Font(family="helvatica", size=20, weight="bold")
+
+    boton_carrusel_jugador1 = tk.Button(Ventana_Play, font=Font_Button_Seleccion,text="NEXT PLAYER", command=Cambiar_Jugador_Jugador1)
+    boton_carrusel_jugador1.place(x=395, y=540)
 
     # Configurar botón para cambiar de equipo jugador 1
-    boton_cambiar_equipo_jugador1 = tk.Button(Ventana_Play, text="Cambiar Equipo Jugador 1", command=Cambiar_Equipo_Jugador1)
-    boton_cambiar_equipo_jugador1.place(x=330, y=600)
+    boton_cambiar_equipo_jugador1 = tk.Button(Ventana_Play, font=Font_Button_Seleccion, text="NEXT TEAM", command=Cambiar_Equipo_Jugador1)
+    boton_cambiar_equipo_jugador1.place(x=410, y=600)
 
     # Configurar label para el nombre del equipo jugador 2
     global nombre_equipo_jugador2
@@ -144,31 +146,39 @@ def Abrir_Ventana_Play():
     imagen_canvas_jugador2 = canvas_imagen_jugador2.create_image(0, 0, anchor=tk.NW, image=imagen_actual_jugador2)
     canvas_imagen_jugador2.place(x=730, y=200)
 
-    boton_carrusel_jugador2 = tk.Button(Ventana_Play, text="Siguiente Jugador Jugador 2", command=Cambiar_Jugador_Jugador2)
-    boton_carrusel_jugador2.place(x=730, y=550)
+    boton_carrusel_jugador2 = tk.Button(Ventana_Play, font=Font_Button_Seleccion, text="NEXT PLAYER", command=Cambiar_Jugador_Jugador2)
+    boton_carrusel_jugador2.place(x=795, y=540)
 
     # Configurar botón para cambiar de equipo jugador 2
-    boton_cambiar_equipo_jugador2 = tk.Button(Ventana_Play, text="Cambiar Equipo Jugador 2", command=Cambiar_Equipo_Jugador2)
-    boton_cambiar_equipo_jugador2.place(x=730, y=600)
+    boton_cambiar_equipo_jugador2 = tk.Button(Ventana_Play, font=Font_Button_Seleccion, text="NEXT TEAM", command=Cambiar_Equipo_Jugador2)
+    boton_cambiar_equipo_jugador2.place(x=810, y=600)
     global boton_listo_jugador1, boton_listo_jugador2
-    boton_listo_jugador1 = tk.Button(Ventana_Play, text="listo", command=Abrir_Ventana_Juego)
-    boton_listo_jugador1.place(x=330, y=650)
+    
+    boton_listo_jugador1 = tk.Button(Ventana_Play, font=Font_Button_Ready, text="ready1", command=Abrir_Ventana_Juego)
+    boton_listo_jugador1.place(x=440, y=660)
 
-    boton_listo_jugador2 = tk.Button(Ventana_Play, text="listo", command=Abrir_Ventana_Juego)
-    boton_listo_jugador2.place(x=730, y=650)
-
+    boton_listo_jugador2 = tk.Button(Ventana_Play, font=Font_Button_Ready, text="ready2", command=Abrir_Ventana_Juego)
+    boton_listo_jugador2.place(x=840, y=660)
+########################################################################################
 def Abrir_Ventana_Juego():
-    if boton_listo_jugador1["text"] == "LISTO" and boton_listo_jugador2["text"] == "LISTO":
-        Ventana_Juego = tk.Toplevel(Ventana_Play)
-        Ventana_Juego.attributes('-fullscreen', True)
-        Ventana_Juego.title("JUEGO")
-        Ventana_Juego.config(bg="black")
-        Ventana_Juego.bind('<Escape>', Cerrar_Ventana)
-    else:
-        boton_listo_jugador1.config(text="LISTO")
-        boton_listo_jugador2.config(text="LISTO")
+    if boton_listo_jugador1["text"] == "ready1":
+        boton_listo_jugador1.config(text="¡READY!", font=("helvatica", 20, "bold"))
 
-# Función para abrir la ventana ABOUT
+    if boton_listo_jugador2["text"] == "ready2":
+        boton_listo_jugador2.config(text="¡READY!", font=("helvatica", 20, "bold"))
+
+    if boton_listo_jugador1["text"] == "¡READY!" and boton_listo_jugador2["text"] == "¡READY!":
+        Abrir_Ventana_Juego_Real()
+        boton_listo_jugador1.config(text="READY", font=("helvatica", 20, "bold"))
+        boton_listo_jugador2.config(text="READY", font=("helvatica", 20, "bold"))
+########################################################################################
+def Abrir_Ventana_Juego_Real():
+    Ventana_Juego = tk.Toplevel(Ventana_Play)
+    Ventana_Juego.attributes('-fullscreen', True)
+    Ventana_Juego.title("JUEGO")
+    Ventana_Juego.config(bg="black")
+    Ventana_Juego.bind('<Escape>', Cerrar_Ventana)
+########################################################################################
 def Abrir_Ventana_About():
     global Ventana_About, Font_Label
     Ventana_About = tk.Toplevel()
@@ -182,8 +192,8 @@ def Abrir_Ventana_About():
 
     Canvas_Info = tk.Canvas(Ventana_About)
     Canvas_Info.pack()
-
-# Ventana Principal
+########################################################################################
+#Ventana Principal
 Ventana_Principal = tk.Tk()
 Ventana_Principal.attributes('-fullscreen', True)
 Ventana_Principal.title("MAIN")
@@ -207,19 +217,19 @@ imagen1 = cargarImagen("wallpaper6.png", Ventana_Principal.winfo_width(), Ventan
 LabelFondo = Label(Ventana_Principal, image=imagen1)
 LabelFondo.place(x=0, y=0, relwidth=1, relheight=1)
 Ventana_Principal.bind("<Configure>", actualizarImagen)
-
-# Fuentes
-Font_Button = Font(family="Courier New", size=30, weight="bold")
-Font_Label = Font(family="Courier New", size=24, weight="bold")
-
+########################################################################################
+Font_Button = Font(family="helvatica", size=30, weight="bold")
+Font_Label = Font(family="helvatica", size=24, weight="bold")
+########################################################################################
 # Botones
-Boton_Play = tk.Button(Ventana_Principal, text="PLAY", font=Font_Button, command=Abrir_Ventana_Play, fg="white", bg="black", padx=50)
+Boton_Play = tk.Button(Ventana_Principal, text="PLAY", font=Font_Button, command=Abrir_Ventana_Play, fg="white", bg="black", padx=50, borderwidth=0)
 Boton_Play.place(x=200, y=300)
 
-Boton_About = tk.Button(Ventana_Principal, text="ABOUT", font=Font_Button, command=Abrir_Ventana_About, fg="white", bg="black", padx=38)
+Boton_About = tk.Button(Ventana_Principal, text="ABOUT", font=Font_Button, command=Abrir_Ventana_About, fg="white", bg="black", padx=38, borderwidth=0)
 Boton_About.place(x=200, y=400)
 
-Label_Version = Label(Ventana_Principal, text="version: 0.1", font=("Courier New", 12, "bold"), fg="white", bg="black")
+Label_Version = Label(Ventana_Principal, text="version: 0.1", font=("helvatica", 12, "bold"), fg="white", bg="black")
 Label_Version.place(x=10, y=10)
+########################################################################################
 
 Ventana_Principal.mainloop()
