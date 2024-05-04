@@ -4,6 +4,10 @@ from PIL import Image, ImageTk
 from tkinter.font import Font
 import os
 import pygame
+
+
+
+
 ########################################################################################
 #Música
 pygame.init()
