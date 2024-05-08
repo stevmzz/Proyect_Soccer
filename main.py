@@ -4,15 +4,8 @@ from PIL import Image, ImageTk
 from tkinter.font import Font
 import os
 import pygame
-<<<<<<< HEAD
 import random
 import time
-=======
-
-
-
-
->>>>>>> c715de3a3fd98a552350243a017e76018fbd8b86
 ########################################################################################
 #Música
 pygame.init()
